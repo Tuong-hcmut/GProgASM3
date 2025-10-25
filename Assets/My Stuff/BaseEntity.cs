@@ -6,7 +6,7 @@ using UnityEngine;
 /// </summary>
 [RequireComponent(typeof(Collider2D))]
 [DisallowMultipleComponent]
-public class BaseEntity : MonoBehaviour
+public abstract class BaseEntity : MonoBehaviour
 {
     // === [Serialized Fields — user-defined] ===
     [Header("Stats")]
