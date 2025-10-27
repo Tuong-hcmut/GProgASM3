@@ -5,25 +5,66 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 public class Main_Menu_Controller : MonoBehaviour
 {
-    public GameObject modeSelectPanel;
     public GameObject mainMenuPanel;
 
+    [Header("Setting Panel")]
     public GameObject settingMenuPanel;
+
+    [Header("Load Panel")]
+    public GameObject loadPanel;
+    public SaveSlotUI[] slotUIs;
+
     void Start()
     {
-    Screen.SetResolution(Display.main.systemWidth, Display.main.systemHeight, FullScreenMode.FullScreenWindow);
+        Screen.SetResolution(Display.main.systemWidth, Display.main.systemHeight, FullScreenMode.FullScreenWindow);
+        if (SaveManager.Instance == null)
+        {
+            var go = new GameObject("SaveManager");
+            go.AddComponent<SaveManager>();
+        }
     }
 
-    public void OpenModeSelect()
+    public void EnterGame()
     {
-        modeSelectPanel.SetActive(true);
-        mainMenuPanel.SetActive(false);
+        Debug.Log("Enter Game Successfully");
+        SceneManager.LoadScene("Game_Scene");
     }
 
-    public void CloseModeSelect()
+    public void LoadGameButton()
     {
-        modeSelectPanel.SetActive(false);
-        mainMenuPanel.SetActive(true);
+        if (loadPanel != null)
+        {
+            loadPanel.SetActive(true);
+            mainMenuPanel.SetActive(false);
+            UpdateLoadPanel();
+        }
+    }
+
+    public void CloseLoadPanel()
+    {
+        if (loadPanel != null)
+        {
+            loadPanel.SetActive(false);
+            mainMenuPanel.SetActive(true);
+            SaveManager.Instance.LoadAllFromDisk();
+        }
+    }
+
+    void UpdateLoadPanel()
+    {
+        if (SaveManager.Instance == null) return;
+        var saves = SaveManager.Instance.GetCachedSaves();
+        for (int i = 0; i < slotUIs.Length; i++)
+        {
+            if (i < saves.Length)
+            {
+                slotUIs[i].Refresh(saves[i], i);
+            }
+            else
+            {
+                slotUIs[i].Refresh(null, i);
+            }
+        }
     }
 
     public void OpenSettingSelect()
@@ -38,35 +79,19 @@ public class Main_Menu_Controller : MonoBehaviour
         mainMenuPanel.SetActive(true);
     }
 
-    public void ChoosePVP()
+
+
+
+
+
+    public void QuitGame()
     {
-        Debug.Log("Choose Player vs Player");
-        SceneManager.LoadScene("Player_vs_Player");
-    }
-
-    public void ChoosePVC()
-    {
-        Debug.Log("Choose Player vs AI");
-        SceneManager.LoadScene("Player_vs_Computer");
-    }
-    // public void LoadScene(string sceneName)
-    // {
-    //     SceneManager.LoadScene(sceneName);
-    // }
-
-    // public void LoadSceneByIndex(int index)
-    // {
-    //     SceneManager.LoadScene(index);
-    // }
-
-   public void QuitGame()
-{
-    Debug.Log("Game exited.");
+        Debug.Log("Game exited.");
 #if UNITY_EDITOR
     UnityEditor.EditorApplication.isPlaying = false; 
 #else
-    Application.Quit(); 
+        Application.Quit();
 #endif
-}
+    }
 
 }
