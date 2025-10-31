@@ -8,12 +8,4 @@ EditorBuildSettings:
   m_configObjects:
     com.unity.dt.app-ui: {fileID: 11400000, guid: 99f9c9493070a9d4c979a8fec7c5a8d3, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: c85cdc655fd141a4a92d2867281f8941, type: 3}
-  m_Scenes:
-  - enabled: 1
-    path: Assets/Scenes/Main Menu Scene.unity
-    guid: afef3fdf4ec624b4cb8dc032cf9a61e0
-  - enabled: 1
-    path: Assets/Scenes/Game_Scene.unity
-    guid: ae6f129b6c758a9448415854050649b4
-  m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

@@ -1,74 +1,40 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Utilities;
 
 /// <summary>
-/// Handles player-specific logic and connects inputs to movement/attack systems.
+/// PlayerController — Handles communication between input, movement and entity lifecycle.
+/// Responsibilities:
+///  - Read input from PlayerInputHandler and forward it to PlayerMovement (via HandleInput)
+///  - Manage control gating (e.g. disable controls on death)
+/// 
+/// Note: PlayerController must not contain any gameplay logic and only act as a coordinator.
 /// </summary>
 [RequireComponent(typeof(PlayerMovement))]
+[RequireComponent(typeof(PlayerInputHandler))]
 //[RequireComponent(typeof(AudioSource))]
 public class PlayerController : BaseEntity
 {
     [Header("Player Settings")]
     [SerializeField] private bool controlEnabled = true;
 
+    private PlayerInputHandler inputHandler;
     private PlayerMovement movement;
-    //private AudioSource audioSource;
-    private Animator animator;
-    private SpriteRenderer sprite;
-
-    private InputAction moveAction;
-    private InputAction jumpAction;
 
     protected override void Awake()
     {
         base.Awake();
+        inputHandler = GetComponent<PlayerInputHandler>();
         movement = GetComponent<PlayerMovement>();
-        audioSource = GetComponent<AudioSource>();
-        animator = GetComponent<Animator>();
-        sprite = GetComponent<SpriteRenderer>();
-
-        var map = InputSystem.actions;
-        moveAction = map.FindAction("Player/Move");
-        jumpAction = map.FindAction("Player/Jump");
-
-        OnEnable();
     }
 
-    override protected void Update()
+    protected override void Update()
     {
         if (!controlEnabled || !IsAlive) return;
-
-        Vector2 input = moveAction.ReadValue<Vector2>();
-        movement.SetMoveInput(input.x);
-
-        if (jumpAction.WasPressedThisFrame())
-            movement.TryJump();
-
-        if (jumpAction.WasReleasedThisFrame())
-            movement.StopJump();
-
-        // Visual feedback
-        //animator.SetBool("grounded", movement.IsGrounded);
-        //animator.SetFloat("velocityX", Mathf.Abs(movement.CurrentVelocity.x) / movement.maxSpeed);
-        sprite.flipX = movement.CurrentVelocity.x < -0.01f;
+        inputHandler.HandleInput(movement);
     }
 
     protected override void OnDeath()
     {
         controlEnabled = false;
         base.OnDeath();
-    }
-
-    private void OnEnable()
-    {
-        moveAction?.Enable();
-        jumpAction?.Enable();
-    }
-
-    private void OnDisable()
-    {
-        moveAction?.Disable();
-        jumpAction?.Disable();
     }
 }

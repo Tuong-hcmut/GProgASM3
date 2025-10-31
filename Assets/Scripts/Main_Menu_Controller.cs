@@ -87,11 +87,11 @@ public class Main_Menu_Controller : MonoBehaviour
     public void QuitGame()
     {
         Debug.Log("Game exited.");
-#if UNITY_EDITOR
-    UnityEditor.EditorApplication.isPlaying = false; 
-#else
+    #if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false; 
+    #else
         Application.Quit();
-#endif
+    #endif
     }
 
 }
