@@ -78,7 +78,8 @@ public class GameManager : MonoBehaviour
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
     }
-
+    public void SetEnableInput(bool input) { return; }
+    public bool IsEnableInput() { return true; }
     private void Start()
     {
         hud = FindFirstObjectByType<HUDManager>();
