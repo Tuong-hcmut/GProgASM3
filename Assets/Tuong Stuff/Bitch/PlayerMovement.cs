@@ -51,7 +51,8 @@ public class PlayerMovement : MonoBehaviour
 
     public bool canMove { get; set; } = true;
 
-    readonly Vector3 flippedScale = new Vector3(-1, 1, 1);
+    readonly Quaternion flippedScale = Quaternion.Euler(0, 180, 0);
+    readonly Quaternion normalScale = Quaternion.Euler(0, 0, 0);
 
     private BaseEntity baseEntity;
     #endregion
@@ -183,15 +184,17 @@ public class PlayerMovement : MonoBehaviour
         {
             if (rb.linearVelocity.x > 0 && isFacingLeft)
             {
-                print("flip to right");
+                //print("flip to right");
                 isFacingLeft = false;
-                anim.transform.localScale = flippedScale;
+                transform.rotation = normalScale;
+                //anim.transform.localScale = flippedScale;
             }
             else if (rb.linearVelocity.x < 0 && !isFacingLeft)
             {
-                print("flip to left");
+                //print("flip to left");
                 isFacingLeft = true;
-                anim.transform.localScale = Vector3.one;
+                transform.rotation = flippedScale;
+                //anim.transform.localScale = Vector3.one;
             }
         }
     }
