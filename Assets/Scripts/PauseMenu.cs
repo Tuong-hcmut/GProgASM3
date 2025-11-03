@@ -8,14 +8,9 @@ public class PauseMenu : MonoBehaviour
     public GameObject settingMenuPanel;
 
     [Header("Optional UI Elements")]
-    public GameObject mapCanvas;
-    public GameObject ScoreText1;
-    public GameObject ScoreText2;
-    public GameObject BoostText1;
-    public GameObject BoostText2;
-    public GameObject time;
-    public GameObject goal;
-
+    public GameObject healthBar;
+    public GameObject manaBar;
+    public GameObject ScoreText;
 
     private bool isPaused = false;
 
@@ -36,20 +31,13 @@ public class PauseMenu : MonoBehaviour
         settingMenuPanel.SetActive(false);
 
         // bật lại map khi resume (nếu có)
-        if (mapCanvas != null)
-            mapCanvas.SetActive(true);
-        if (ScoreText1 != null)
-            ScoreText1.SetActive(true);
-        if (ScoreText2 != null)
-            ScoreText2.SetActive(true);
-        if (BoostText1 != null)
-            BoostText1.SetActive(true);
-        if (BoostText2 != null)
-            BoostText2.SetActive(true);
-        if (time != null)
-            time.SetActive(true);
-        if (goal != null)
-            goal.SetActive(true);
+        if (healthBar != null)
+            healthBar.SetActive(true);
+        if (manaBar != null)
+            manaBar.SetActive(true);
+        if (ScoreText != null)
+            ScoreText.SetActive(true);
+        
 
         Time.timeScale = 1f;
         isPaused = false;
@@ -60,20 +48,12 @@ public class PauseMenu : MonoBehaviour
         pauseMenuPanel.SetActive(true);
 
         // tắt map khi pause (nếu có)
-        if (mapCanvas != null)
-            mapCanvas.SetActive(false);
-        if (ScoreText1 != null)
-            ScoreText1.SetActive(false);
-        if (ScoreText2 != null)
-            ScoreText2.SetActive(false);
-        if (BoostText1 != null)
-            BoostText1.SetActive(false);
-        if (BoostText2 != null)
-            BoostText2.SetActive(false);
-        if (time != null)
-            time.SetActive(false);
-        if (goal != null)
-            goal.SetActive(false);
+        if (healthBar != null)
+            healthBar.SetActive(false);
+        if (manaBar != null)
+            manaBar.SetActive(false);
+        if (ScoreText != null)
+            ScoreText.SetActive(false);
 
 
         Time.timeScale = 0f;

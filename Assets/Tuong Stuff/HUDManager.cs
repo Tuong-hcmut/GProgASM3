@@ -19,10 +19,10 @@ public class HUDManager : MonoBehaviour
         // Only the timer updates continuously
         if (GameManager.Instance == null) return;
 
-        float timeLeft = GameManager.Instance.GetTimeRemaining();
-        int minutes = Mathf.FloorToInt(timeLeft / 60f);
-        int seconds = Mathf.FloorToInt(timeLeft % 60f);
-        timerText.text = $"{minutes:00}:{seconds:00}";
+        // float timeLeft = GameManager.Instance.GetTimeRemaining();
+        // int minutes = Mathf.FloorToInt(timeLeft / 60f);
+        // int seconds = Mathf.FloorToInt(timeLeft % 60f);
+        // timerText.text = $"{minutes:00}:{seconds:00}";
     }
 
     // Called manually by GameManager, PlayerController2D, etc.
@@ -31,14 +31,14 @@ public class HUDManager : MonoBehaviour
         if (GameManager.Instance == null) return;
 
         // --- Scores ---
-        if (player1ScoreText != null)
-            player1ScoreText.text = GameManager.Instance.player1Score.ToString();
-        if (player2ScoreText != null)
-            player2ScoreText.text = GameManager.Instance.player2Score.ToString();
+        // if (player1ScoreText != null)
+        //     player1ScoreText.text = GameManager.Instance.player1Score.ToString();
+        // if (player2ScoreText != null)
+        //     player2ScoreText.text = GameManager.Instance.player2Score.ToString();
 
         // --- Boost availability ---
-        UpdateBoostStatus(1, GameManager.Instance.player1);
-        UpdateBoostStatus(2, GameManager.Instance.player2);
+        // UpdateBoostStatus(1, GameManager.Instance.player1);
+        // UpdateBoostStatus(2, GameManager.Instance.player2);
     }
 
     private void UpdateBoostStatus(int playerIndex, GameObject playerObj)

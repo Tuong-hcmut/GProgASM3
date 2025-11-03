@@ -1,28 +1,36 @@
 using UnityEngine;
 
 public class Checkpoint : MonoBehaviour
-{
+{   
+    // Thêm dòng này
+    public SaveNotificationUI saveNotificationUI;
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
-            // Lấy component PlayerSaveLoad từ đối tượng Player
-            PlayerSaveLoad playerSaveLoad = collision.GetComponent<PlayerSaveLoad>();
-
-            if (playerSaveLoad != null)
+            var stats = collision.GetComponent<PlayerStats>();
+            if (stats != null)
             {
-                // Gọi AutoSave bằng biến instance playerSaveLoad
+                // Lưu game
                 SaveManager.Instance.AutoSave(
                     transform.position,
-                    playerSaveLoad.currentHP,   
-                    playerSaveLoad.mana          
+                    stats.currentHP,
+                    stats.mana,
+                    stats.score
                 );
 
-                Debug.Log("Checkpoint saved!");
+                Debug.Log("Checkpoint AutoSaved!");
+
+                // Hiển thị thông báo "Game Saved"
+                if (saveNotificationUI != null)
+                    saveNotificationUI.ShowNotification("Game Saved");
+                else
+                    Debug.LogWarning("SaveNotificationUI chưa được gán trong Checkpoint!");
             }
             else
             {
-                Debug.LogWarning("PlayerSaveLoad not found on Player object!");
+                Debug.LogWarning("PlayerStats not found on Player!");
             }
         }
     }

@@ -1,9 +1,7 @@
-// SaveManager.cs
 using System.IO;
 using UnityEngine;
 using System;
 using UnityEngine.SceneManagement;
-using System.Linq;
 
 public class SaveManager : MonoBehaviour
 {
@@ -11,9 +9,8 @@ public class SaveManager : MonoBehaviour
 
     public int slotCount = 3;
     private string[] filePaths;
-    private SaveData[] cachedSaves; // loaded from disk
+    private SaveData[] cachedSaves;
 
-    // When player clicks Load, store the loaded save here so SceneLoadHandler can apply
     public SaveData pendingLoadedSave;
 
     private void Awake()
@@ -25,11 +22,18 @@ public class SaveManager : MonoBehaviour
         filePaths = new string[slotCount];
         cachedSaves = new SaveData[slotCount];
         for (int i = 0; i < slotCount; i++)
-        {
-            filePaths[i] = Path.Combine(Application.persistentDataPath, $"save_slot_{i+1}.json");
-        }
+            filePaths[i] = Path.Combine(Application.persistentDataPath, $"save_slot_{i + 1}.json");
+
         LoadAllFromDisk();
-        SceneManager.sceneLoaded += OnSceneLoaded; // for safety
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    public void AutoSaveToFile(Vector3 pos, int hp, int mana, int score)
+    {
+    SaveData data = new SaveData(pos, SceneManager.GetActiveScene().name, hp, mana, score);
+    string path = Application.persistentDataPath + "/save1.json";
+    File.WriteAllText(path, JsonUtility.ToJson(data));
+    Debug.Log($"[SAVE] Game saved at {path}");
     }
 
     private void OnDestroy()
@@ -37,7 +41,7 @@ public class SaveManager : MonoBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    // Load all saves from disk into cachedSaves
+    // --- Load all saves from disk ---
     public void LoadAllFromDisk()
     {
         for (int i = 0; i < slotCount; i++)
@@ -59,23 +63,18 @@ public class SaveManager : MonoBehaviour
         }
     }
 
-    // Return copy of cached saves for UI
-    public SaveData[] GetCachedSaves()
-    {
-        return cachedSaves;
-    }
+    public SaveData[] GetCachedSaves() => cachedSaves;
 
-    // AutoSave at checkpoint: choose slot = first empty, else oldest (min timestamp)
-    public int AutoSave(UnityEngine.Vector3 pos, int hp = 0, int mana = 0)
+    // --- AutoSave when checkpoint triggered ---
+    public int AutoSave(Vector3 pos, int hp = 0, int mana = 0, int score = 0)
     {
-        // Choose slot index
         int chosen = -1;
+
         for (int i = 0; i < slotCount; i++)
             if (cachedSaves[i] == null) { chosen = i; break; }
 
         if (chosen == -1)
         {
-            // no empty slot => pick oldest
             long minTicks = long.MaxValue;
             for (int i = 0; i < slotCount; i++)
             {
@@ -85,22 +84,20 @@ public class SaveManager : MonoBehaviour
                     chosen = i;
                 }
             }
-            // fallback
             if (chosen == -1) chosen = 0;
         }
 
-        SaveData sd = new SaveData(pos, SceneManager.GetActiveScene().name, hp, mana);
+        SaveData sd = new SaveData(pos, SceneManager.GetActiveScene().name, hp, mana, score);
         cachedSaves[chosen] = sd;
         SaveToDisk(chosen);
-        Debug.Log($"Autosaved to slot {chosen+1} at {sd.GetTimestampString()}");
+        Debug.Log($"[AutoSave] Slot {chosen + 1}: {sd.sceneName} @ {sd.GetTimestampString()}");
         return chosen;
     }
 
-    // Explicit save to a specific slot (e.g., user-invoked)
-    public void SaveToSlot(int slotIndex, UnityEngine.Vector3 pos, int hp = 0, int mana = 0)
+    public void SaveToSlot(int slotIndex, Vector3 pos, int hp = 0, int mana = 0, int score = 0)
     {
         if (slotIndex < 0 || slotIndex >= slotCount) return;
-        SaveData sd = new SaveData(pos, SceneManager.GetActiveScene().name, hp, mana);
+        SaveData sd = new SaveData(pos, SceneManager.GetActiveScene().name, hp, mana, score);
         cachedSaves[slotIndex] = sd;
         SaveToDisk(slotIndex);
     }
@@ -119,44 +116,44 @@ public class SaveManager : MonoBehaviour
         }
     }
 
-    // Called by MainMenu when player clicks Load on a slot
+    // --- Load slot from main menu ---
     public void LoadSlotAndStart(int slotIndex)
     {
         if (slotIndex < 0 || slotIndex >= slotCount) return;
-        if (cachedSaves[slotIndex] == null) { Debug.Log("No save in that slot."); return; }
+        if (cachedSaves[slotIndex] == null)
+        {
+            Debug.Log("No save in that slot.");
+            return;
+        }
+
         pendingLoadedSave = cachedSaves[slotIndex];
-        // Begin loading the scene stored in save
         SceneManager.LoadScene(pendingLoadedSave.sceneName);
     }
 
-    // After scene loads we must apply pendingLoadedSave to the player object
+    // --- Apply save to player after scene loads ---
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (pendingLoadedSave != null)
         {
-            // Find a SceneLoadHandler in the scene to apply the save (recommended)
             var handler = FindFirstObjectByType<SceneLoadHandler>();
             if (handler != null)
             {
                 handler.ApplyLoadedSave(pendingLoadedSave);
                 pendingLoadedSave = null;
+                return;
             }
-            else
+
+            var player = GameObject.FindWithTag("Player");
+            if (player != null)
             {
-                // fallback: try to find player immediately
-                var player = GameObject.FindWithTag("Player");
-                if (player != null)
-                {
-                    var playerSaveLoad = player.GetComponent<PlayerSaveLoad>();
-                    if (playerSaveLoad != null)
-                        playerSaveLoad.ApplySave(pendingLoadedSave);
-                }
-                pendingLoadedSave = null;
+                var playerSaveLoad = player.GetComponent<PlayerSaveLoad>();
+                if (playerSaveLoad != null)
+                    playerSaveLoad.ApplySave(pendingLoadedSave);
             }
+            pendingLoadedSave = null;
         }
     }
 
-    // Utility: delete a slot
     public void DeleteSlot(int slotIndex)
     {
         if (slotIndex < 0 || slotIndex >= slotCount) return;
