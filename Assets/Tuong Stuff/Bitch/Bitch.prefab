@@ -29,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
   m_LocalPosition: {x: 0, y: 44, z: 0}
-  m_LocalScale: {x: 1, y: 89, z: 1}
+  m_LocalScale: {x: 3, y: 89, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8875875269732156009}
@@ -179,7 +179,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
   m_LocalPosition: {x: -31, y: 0, z: 0}
-  m_LocalScale: {x: 61, y: 1, z: 1}
+  m_LocalScale: {x: 61, y: 3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8875875269732156009}
@@ -318,6 +318,7 @@ GameObject:
   - component: {fileID: 4857725609298446793}
   - component: {fileID: 41700619876087730}
   - component: {fileID: 4108618668506839809}
+  - component: {fileID: 4590571482753132781}
   m_Layer: 0
   m_Name: Bitch
   m_TagString: Player
@@ -600,3 +601,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &4590571482753132781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6032667606406016343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6310c2674f005874cb136a995840db94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
+  currentHP: 100
+  mana: 50
+  score: 0
+  textUI: {fileID: 0}
