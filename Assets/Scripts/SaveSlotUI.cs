@@ -29,9 +29,9 @@ public class SaveSlotUI : MonoBehaviour
         }
         else
         {
-            titleText.text = $"Slot {index + 1}: {sd.sceneName}";
+            titleText.text = $"Slot {index + 1}: ";
             var pos = sd.GetPosition();
-            infoText.text = $"Pos: {pos.x:F1},{pos.y:F1}  Time: {sd.GetTimestampString()}";
+            infoText.text = $"Time: {sd.GetTimestampString()}";
             loadButton.interactable = true;
             if (deleteButton) deleteButton.gameObject.SetActive(true);
         }
