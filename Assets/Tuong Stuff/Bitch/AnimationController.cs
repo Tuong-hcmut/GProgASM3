@@ -34,8 +34,8 @@ public class AnimationController : MonoBehaviour
         animator = GetComponent<Animator>();
         groundedBool = Animator.StringToHash("Grounded");
         slidingBool = Animator.StringToHash("Sliding");
-        movementSpeed = Animator.StringToHash("Movement");
-        velocitySpeed = Animator.StringToHash("Velocity");
+        movementSpeed = Animator.StringToHash("HorizontalVelocity");
+        velocitySpeed = Animator.StringToHash("VerticalVelocity");
         jumpTrigger = Animator.StringToHash("Jump");
         doubleJumpTrigger = Animator.StringToHash("DoubleJump");
         slideJumpTrigger = Animator.StringToHash("SlideJump");

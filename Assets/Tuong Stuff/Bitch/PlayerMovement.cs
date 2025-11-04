@@ -134,12 +134,14 @@ public class PlayerMovement : MonoBehaviour
             ++jumpCount;
             if (jumpCount == 1)
             {
-                if (anim != null) anim.SetTrigger(anim.jumpTrigger);
+                if (anim != null) anim.Play("Jump");
+                //if (anim != null) anim.SetTrigger(anim.jumpTrigger);
                 baseEntity.audioEffectPlayer?.Play(PlayerAudio.AudioType.Jump, true);
             }
             else if (jumpCount == 2)
             {
-                if (anim != null) anim.SetTrigger(anim.doubleJumpTrigger);
+                if (anim != null) anim.Play("Jump");
+                //if (anim != null) anim.SetTrigger(anim.doubleJumpTrigger);
                 // effecter?.DoEffect(CharacterEffect.EffectType.DoubleJump, true);
                 baseEntity.audioEffectPlayer?.Play(PlayerAudio.AudioType.HeroWings, true);
             }
