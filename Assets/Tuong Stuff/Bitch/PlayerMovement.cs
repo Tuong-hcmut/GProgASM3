@@ -157,10 +157,13 @@ public class PlayerMovement : MonoBehaviour
     {
         jumpInput = false;
         isJumping = false;
+        /*
         if (jumpCount == 1 && anim != null)
             anim.ResetTrigger(anim.jumpTrigger);
         else if (jumpCount == 2 && anim != null)
-            anim.ResetTrigger(anim.doubleJumpTrigger);
+            anim.ResetTrigger(anim.doubleJumpTrigger);*/
+        // Didn't decide to do separate double jump animations in the end, 
+        // ill leave this in just in case i change my mind
     }
 
     private void UpdateJump()
@@ -221,12 +224,12 @@ public class PlayerMovement : MonoBehaviour
     {
         baseEntity.gameManager.SetEnableInput(false);
         enableGravity = false;
-        if (anim != null) anim.SetTrigger(anim.slideJumpTrigger);
-        rb.linearVelocity = new Vector2(transform.lossyScale.x * wallReactingForce, wallJumpForce);
+        if (anim != null) anim.Play("Jump");
+        int direction = isFacingLeft ? 1 : -1;
+        rb.linearVelocity = new Vector2(transform.lossyScale.x * wallReactingForce * direction, wallJumpForce);
         yield return new WaitForSeconds(0.15f);
         enableGravity = true;
         baseEntity.gameManager.SetEnableInput(true);
-        if (anim != null) anim.ResetTrigger(anim.slideJumpTrigger);
     }
 
     public void StopHorizontalMovement()

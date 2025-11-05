@@ -43,7 +43,7 @@ public class PlayerAttack : BaseEntity
     private float lastSlashTime;
     public enum AttackType
     {
-        Slash, AltSlash, DownSlash, UpSlash, CycloneSlash, WallSlash, GreatSlash, DashSlash, SharpShadow,
+        Slash, AltSlash, DownSlash, UpSlash
     }
     #endregion
     #region Methods
@@ -142,7 +142,7 @@ public class PlayerAttack : BaseEntity
             StartCoroutine(FindFirstObjectByType<Invincibility>().SetInvincibility());
             movement.ApplyDamageMovement();
         }
-        if (anim != null) anim.Play("Damage");
+        if (anim != null) anim.Play("Hurt");
         yield return null;
     }
     public void Play(AttackType attackType, ref List<Collider2D> colliders)
@@ -164,16 +164,6 @@ public class PlayerAttack : BaseEntity
             case AttackType.UpSlash:
                 Physics2D.OverlapCollider(upSlash.GetComponent<Collider2D>(), enemyContactFilter, colliders);
                 upSlash.GetComponent<AudioSource>().Play();
-                break;
-            case AttackType.CycloneSlash:
-                break;
-            case AttackType.WallSlash:
-                break;
-            case AttackType.GreatSlash:
-                break;
-            case AttackType.DashSlash:
-                break;
-            case AttackType.SharpShadow:
                 break;
             default:
                 break;

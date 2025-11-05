@@ -36,10 +36,10 @@ public class AnimationController : MonoBehaviour
         slidingBool = Animator.StringToHash("Sliding");
         movementSpeed = Animator.StringToHash("HorizontalVelocity");
         velocitySpeed = Animator.StringToHash("VerticalVelocity");
-        jumpTrigger = Animator.StringToHash("Jump");
-        doubleJumpTrigger = Animator.StringToHash("DoubleJump");
-        slideJumpTrigger = Animator.StringToHash("SlideJump");
-        turnTrigger = Animator.StringToHash("Turn");
+        //jumpTrigger = Animator.StringToHash("Jump");
+        //doubleJumpTrigger = Animator.StringToHash("DoubleJump");
+        //slideJumpTrigger = Animator.StringToHash("SlideJump");
+        //turnTrigger = Animator.StringToHash("Turn");
         respawnTrigger = Animator.StringToHash("Respawn");
     }
 
