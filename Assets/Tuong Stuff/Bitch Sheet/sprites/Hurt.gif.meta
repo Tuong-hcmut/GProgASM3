@@ -136,10 +136,10 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 64
+        width: 63
         height: 86
-      alignment: 8
-      pivot: {x: 1, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -156,12 +156,12 @@ TextureImporter:
       name: animation_row_9_1
       rect:
         serializedVersion: 2
-        x: 84
-        y: 11
-        width: 75
-        height: 74
-      alignment: 8
-      pivot: {x: 1, y: 0}
+        x: 85
+        y: 12
+        width: 73
+        height: 72
+      alignment: 9
+      pivot: {x: 0.4520548, y: 0.5972222}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -178,12 +178,12 @@ TextureImporter:
       name: animation_row_9_2
       rect:
         serializedVersion: 2
-        x: 180
-        y: 4
-        width: 94
-        height: 35
-      alignment: 8
-      pivot: {x: 1, y: 0}
+        x: 181
+        y: 5
+        width: 92
+        height: 33
+      alignment: 9
+      pivot: {x: 0.5, y: 1.4848485}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -200,12 +200,12 @@ TextureImporter:
       name: animation_row_9_3
       rect:
         serializedVersion: 2
-        x: 295
-        y: 9
-        width: 80
-        height: 54
-      alignment: 8
-      pivot: {x: 1, y: 0}
+        x: 296
+        y: 10
+        width: 78
+        height: 52
+      alignment: 9
+      pivot: {x: 0.3846154, y: 0.88461536}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -222,12 +222,12 @@ TextureImporter:
       name: animation_row_9_4
       rect:
         serializedVersion: 2
-        x: 381
+        x: 382
         y: 7
-        width: 65
-        height: 63
-      alignment: 8
-      pivot: {x: 1, y: 0}
+        width: 63
+        height: 61
+      alignment: 9
+      pivot: {x: 0.5, y: 0.8196721}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -244,12 +244,12 @@ TextureImporter:
       name: animation_row_9_5
       rect:
         serializedVersion: 2
-        x: 472
+        x: 473
         y: 0
-        width: 67
-        height: 85
-      alignment: 8
-      pivot: {x: 1, y: 0}
+        width: 66
+        height: 84
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -266,12 +266,12 @@ TextureImporter:
       name: animation_row_9_6
       rect:
         serializedVersion: 2
-        x: 544
+        x: 545
         y: 0
-        width: 49
-        height: 84
-      alignment: 8
-      pivot: {x: 1, y: 0}
+        width: 48
+        height: 83
+      alignment: 9
+      pivot: {x: 0.47916666, y: 0.4939759}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []

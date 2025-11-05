@@ -131,12 +131,12 @@ TextureImporter:
       name: sprite_sheet(7)_0
       rect:
         serializedVersion: 2
-        x: 20
-        y: 29
-        width: 65
-        height: 92
-      alignment: 8
-      pivot: {x: 1, y: 0}
+        x: 30
+        y: 30
+        width: 45
+        height: 91
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -153,12 +153,12 @@ TextureImporter:
       name: sprite_sheet(7)_1
       rect:
         serializedVersion: 2
-        x: 98
-        y: 29
-        width: 65
-        height: 93
-      alignment: 8
-      pivot: {x: 1, y: 0}
+        x: 102
+        y: 30
+        width: 53
+        height: 91
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -175,12 +175,12 @@ TextureImporter:
       name: sprite_sheet(7)_2
       rect:
         serializedVersion: 2
-        x: 184
-        y: 29
-        width: 65
+        x: 177
+        y: 30
+        width: 71
         height: 91
-      alignment: 8
-      pivot: {x: 1, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -197,12 +197,12 @@ TextureImporter:
       name: sprite_sheet(7)_3
       rect:
         serializedVersion: 2
-        x: 270
-        y: 29
-        width: 65
-        height: 92
-      alignment: 8
-      pivot: {x: 1, y: 0}
+        x: 275
+        y: 30
+        width: 53
+        height: 91
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -219,12 +219,12 @@ TextureImporter:
       name: sprite_sheet(7)_4
       rect:
         serializedVersion: 2
-        x: 349
-        y: 29
-        width: 65
-        height: 93
-      alignment: 8
-      pivot: {x: 1, y: 0}
+        x: 357
+        y: 30
+        width: 47
+        height: 91
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -241,12 +241,12 @@ TextureImporter:
       name: sprite_sheet(7)_5
       rect:
         serializedVersion: 2
-        x: 432
-        y: 29
-        width: 65
+        x: 424
+        y: 30
+        width: 71
         height: 91
-      alignment: 8
-      pivot: {x: 1, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
