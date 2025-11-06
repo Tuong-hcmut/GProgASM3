@@ -118,6 +118,15 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Dash"",
+                    ""type"": ""Button"",
+                    ""id"": ""f73b3598-32b0-4ad0-89fb-a13b2fb534a9"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -195,6 +204,17 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""70779d06-78b7-47c1-a6cb-94d935c96dc9"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -320,6 +340,7 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
         m_GamePlayer_Movement = m_GamePlayer.FindAction("Movement", throwIfNotFound: true);
         m_GamePlayer_Jump = m_GamePlayer.FindAction("Jump", throwIfNotFound: true);
         m_GamePlayer_Attack = m_GamePlayer.FindAction("Attack", throwIfNotFound: true);
+        m_GamePlayer_Dash = m_GamePlayer.FindAction("Dash", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -409,6 +430,7 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
     private readonly InputAction m_GamePlayer_Movement;
     private readonly InputAction m_GamePlayer_Jump;
     private readonly InputAction m_GamePlayer_Attack;
+    private readonly InputAction m_GamePlayer_Dash;
     /// <summary>
     /// Provides access to input actions defined in input action map "GamePlayer".
     /// </summary>
@@ -432,6 +454,10 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "GamePlayer/Attack".
         /// </summary>
         public InputAction @Attack => m_Wrapper.m_GamePlayer_Attack;
+        /// <summary>
+        /// Provides access to the underlying input action "GamePlayer/Dash".
+        /// </summary>
+        public InputAction @Dash => m_Wrapper.m_GamePlayer_Dash;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -467,6 +493,9 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
             @Attack.started += instance.OnAttack;
             @Attack.performed += instance.OnAttack;
             @Attack.canceled += instance.OnAttack;
+            @Dash.started += instance.OnDash;
+            @Dash.performed += instance.OnDash;
+            @Dash.canceled += instance.OnDash;
         }
 
         /// <summary>
@@ -487,6 +516,9 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
             @Attack.started -= instance.OnAttack;
             @Attack.performed -= instance.OnAttack;
             @Attack.canceled -= instance.OnAttack;
+            @Dash.started -= instance.OnDash;
+            @Dash.performed -= instance.OnDash;
+            @Dash.canceled -= instance.OnDash;
         }
 
         /// <summary>
@@ -666,6 +698,13 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnAttack(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Dash" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnDash(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

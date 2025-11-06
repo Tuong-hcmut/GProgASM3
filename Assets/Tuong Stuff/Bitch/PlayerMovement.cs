@@ -25,6 +25,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float jumpForce = 0.0f;
     [SerializeField] float wallJumpForce = 0.0f;
     [SerializeField] float wallReactingForce = 0.0f;
+    [SerializeField] float dashForce = 15.0f;
+    [SerializeField] float dashDuration = 0.15f;
+    [SerializeField] float dashCooldown = 0.5f;
     [SerializeField] float recoilForce = 0.0f;
     [SerializeField] float downRecoilForce = 0.0f;
     [SerializeField] float hurtForce = 0.0f;
@@ -42,12 +45,16 @@ public class PlayerMovement : MonoBehaviour
     private bool jumpInput = false;
     private bool enableGravity = false;
     private int jumpCount;
+    private int dashCount;
+
 
     private bool isOnGround = true;
     private bool isFacingLeft = false;
     private bool isJumping = false;
     private bool isSliding = false;
-    private bool isFalling;
+    //  private bool isFalling;
+    private bool isDashing = false;
+    private bool canDash = true;
 
     public bool canMove { get; set; } = true;
 
@@ -68,6 +75,7 @@ public class PlayerMovement : MonoBehaviour
             inputHandler.JumpStarted += OnJumpStarted;
             inputHandler.JumpPerformed += ctx => OnJumpPerformed();
             inputHandler.JumpCanceled += ctx => OnJumpPerformed();
+            inputHandler.DashStarted += OnDashStarted;
         }
         enableGravity = true;
     }
@@ -112,7 +120,47 @@ public class PlayerMovement : MonoBehaviour
             rb.linearVelocity = velocity;
         }
     }
+    private void OnDashStarted(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        print("ondashstart");
+        OnDashStarted();
+    }
+    private void OnDashStarted()
+    {
+        print("ondashstart");
+        if (!baseEntity.gameManager.IsEnableInput() || baseEntity.GetIsDead()) return;
+        if (!canDash || isDashing) return;
+        if (dashCount >= 1) return;
 
+        StartCoroutine(DoDash());
+    }
+    private IEnumerator DoDash()
+    {
+        print("dashingcoroute");
+        dashCount++;
+        isDashing = true;
+        canDash = false;
+
+        baseEntity.gameManager.SetEnableInput(false);
+        enableGravity = false;
+        float direction = isFacingLeft ? -1f : 1f;
+        if (anim != null) anim.Play("Dashing");
+
+        // Apply instantaneous velocity
+        rb.linearVelocity = new Vector2(direction * dashForce, 0f);
+
+        // Wait for dash duration
+        yield return new WaitForSeconds(dashDuration);
+
+        // Restore control
+        enableGravity = true;
+        baseEntity.gameManager.SetEnableInput(true);
+        isDashing = false;
+
+        // optional cooldown
+        yield return new WaitForSeconds(dashCooldown);
+        canDash = true;
+    }
     private void OnJumpStarted(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
         OnJumpStarted();
@@ -152,7 +200,6 @@ public class PlayerMovement : MonoBehaviour
             jumpInput = true;
         }
     }
-
     private void OnJumpPerformed()
     {
         jumpInput = false;
@@ -168,7 +215,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void UpdateJump()
     {
-        if (isJumping && rb.linearVelocity.y < 0) isFalling = true;
+        //  if (isJumping && rb.linearVelocity.y < 0) isFalling = true;
 
         if (jumpInput && baseEntity.gameManager.IsEnableInput())
         {
@@ -177,9 +224,10 @@ public class PlayerMovement : MonoBehaviour
             //   effecter?.DoEffect(CharacterEffect.EffectType.FallTrail, false);
         }
 
-        if (isOnGround && !isJumping && jumpCount != 0)
+        if (isOnGround && !isJumping)
         {
             jumpCount = 0;
+            dashCount = 0;
         }
     }
 
@@ -301,7 +349,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 isOnGround = true;
                 isJumping = false;
-                isFalling = false;
+                //  isFalling = false;
                 //  effecter?.DoEffect(CharacterEffect.EffectType.FallTrail, true);
             }
             else if ((collision.gameObject.layer == LayerMask.NameToLayer("Ground") || collision.gameObject.layer == LayerMask.NameToLayer("Soft Terrain"))
@@ -328,14 +376,15 @@ public class PlayerMovement : MonoBehaviour
         if (!baseEntity.GetIsDead() && anim != null) anim.SetBool(anim.groundedBool, isOnGround);
     }
 
-    public void ResetFallDistance()
-    {
-        if (anim != null) anim.GetBehaviour<FallingBehaviour>().ResetAllParams();
-    }
-
     public void SlideWall_ResetJumpCount()
     {
         jumpCount = 1;
+        dashCount = 0;
+    }
+    public void Ground_ResetJumpCount()
+    {
+        jumpCount = 0;
+        dashCount = 0;
     }
 
     public bool GetIsOnGround() => isOnGround;

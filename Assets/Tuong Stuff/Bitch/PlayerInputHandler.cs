@@ -23,6 +23,9 @@ public class PlayerInputHandler : MonoBehaviour
     public event Action<InputAction.CallbackContext> AttackStarted;
     public event Action<InputAction.CallbackContext> AttackPerformed;
     public event Action<InputAction.CallbackContext> AttackCanceled;
+    public event Action<InputAction.CallbackContext> DashStarted;
+    public event Action<InputAction.CallbackContext> DashPerformed;
+    public event Action<InputAction.CallbackContext> DashCanceled;
 
     private void OnEnable()
     {
@@ -37,6 +40,10 @@ public class PlayerInputHandler : MonoBehaviour
         autogen.Attack.started += ctx => AttackStarted?.Invoke(ctx);
         autogen.Attack.performed += ctx => AttackPerformed?.Invoke(ctx);
         autogen.Attack.canceled += ctx => AttackCanceled?.Invoke(ctx);
+
+        autogen.Dash.started += ctx => DashStarted?.Invoke(ctx);
+        autogen.Dash.performed += ctx => DashPerformed?.Invoke(ctx);
+        autogen.Dash.canceled += ctx => DashCanceled?.Invoke(ctx);
     }
 
     private void OnDisable()
@@ -52,5 +59,9 @@ public class PlayerInputHandler : MonoBehaviour
         autogen.Attack.started -= ctx => AttackStarted?.Invoke(ctx);
         autogen.Attack.performed -= ctx => AttackPerformed?.Invoke(ctx);
         autogen.Attack.canceled -= ctx => AttackCanceled?.Invoke(ctx);
+
+        autogen.Dash.started -= ctx => DashStarted?.Invoke(ctx);
+        autogen.Dash.performed -= ctx => DashPerformed?.Invoke(ctx);
+        autogen.Dash.canceled -= ctx => DashCanceled?.Invoke(ctx);
     }
 }

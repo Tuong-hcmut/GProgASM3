@@ -23,6 +23,7 @@ public class InputManager : MonoBehaviour
         InputControl.GamePlayer.Movement.Enable();
         InputControl.GamePlayer.Jump.Enable();
         InputControl.GamePlayer.Attack.Enable();
+        InputControl.GamePlayer.Dash.Enable();
         InputControl.UI.Navigate.Enable();
         InputControl.UI.Submit.Enable();
 
@@ -33,6 +34,7 @@ public class InputManager : MonoBehaviour
         InputControl.GamePlayer.Movement.Disable();
         InputControl.GamePlayer.Jump.Disable();
         InputControl.GamePlayer.Attack.Disable();
+        InputControl.GamePlayer.Dash.Disable();
         InputControl.UI.Navigate.Disable();
         InputControl.UI.Submit.Disable();
     }

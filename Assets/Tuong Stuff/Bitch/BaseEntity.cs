@@ -40,8 +40,8 @@ public class BaseEntity : MonoBehaviour
         }
     }
     //placeholder methods
-    public void SetEnableInput(bool input) { return; }
-    public bool IsEnableInput() { return true; }
+    public void SetEnableInput(bool input) { gameManager.SetEnableInput(input); }
+    public bool IsEnableInput() { return gameManager.IsEnableInput(); }
     public void LoseHealth(int health)
     {
         this.health -= health;

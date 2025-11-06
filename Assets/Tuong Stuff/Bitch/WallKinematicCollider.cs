@@ -16,6 +16,7 @@ public class WallKinematicCollider : MonoBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
             movement.SetIsSliding(true);
+            movement.SlideWall_ResetJumpCount();
         }
     }
 

@@ -29,11 +29,6 @@ public class PlayerAttack : BaseEntity
     [SerializeField] GameObject altSlash;
     [SerializeField] GameObject downSlash;
     [SerializeField] GameObject upSlash;
-    [SerializeField] GameObject cycloneSlash;
-    [SerializeField] GameObject wallSlash;
-    [SerializeField] GameObject greatSlash;
-    [SerializeField] GameObject dashSlash;
-    [SerializeField] GameObject sharpShadow;
 
     AnimationController anim;
     PlayerInputHandler inputHandler;
@@ -75,22 +70,22 @@ public class PlayerAttack : BaseEntity
         var vectorInput = inputHandler.MoveInput;
         if (vectorInput.y > 0)
         {
-            DoSlash(AttackType.UpSlash, "UpSlash");
+            DoSlash(AttackType.UpSlash, "UpAttack");
         }
         else if (!movement.GetIsOnGround() && vectorInput.y < 0)
         {
-            DoSlash(AttackType.DownSlash, "DownSlash");
+            DoSlash(AttackType.DownSlash, "DownAttack");
         }
         else
         {
             slashCount++;
             if (slashCount == 1)
             {
-                DoSlash(AttackType.Slash, "Slash");
+                DoSlash(AttackType.Slash, "Attack");
             }
             else if (slashCount == 2)
             {
-                DoSlash(AttackType.AltSlash, "AltSlash");
+                DoSlash(AttackType.AltSlash, "AltAttack");
                 slashCount = 0;
             }
         }

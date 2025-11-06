@@ -16,6 +16,7 @@ public class GroundKinomaticCollider : MonoBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
             movement.SetIsOnGrounded(true);
+            movement.Ground_ResetJumpCount();
         }
     }
 

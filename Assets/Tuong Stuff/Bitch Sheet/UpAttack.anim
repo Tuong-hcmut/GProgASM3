@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Attack
+  m_Name: UpAttack
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -22,7 +22,7 @@ AnimationClip:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.11666667
+        time: 0.033333335
         value: 1
         inSlope: Infinity
         outSlope: Infinity
@@ -34,7 +34,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_Enabled
-    path: Slash
+    path: UpSlash
     classID: 212
     script: {fileID: 0}
     flags: 0
@@ -42,13 +42,11 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: -2449993428455917677, guid: 747db86c5f6634045ad2b8347f67eef1, type: 3}
-    - time: 0.11666667
-      value: {fileID: -2809762651481000769, guid: 747db86c5f6634045ad2b8347f67eef1, type: 3}
-    - time: 0.21666667
-      value: {fileID: -5142421022230636189, guid: 747db86c5f6634045ad2b8347f67eef1, type: 3}
+      value: {fileID: -4677229879748992270, guid: f5f649a4555bb5d45b675bdc8d5eb276, type: 3}
+    - time: 0.16666667
+      value: {fileID: -2970611757462567388, guid: f5f649a4555bb5d45b675bdc8d5eb276, type: 3}
     - time: 0.33333334
-      value: {fileID: -2123145097946337898, guid: 747db86c5f6634045ad2b8347f67eef1, type: 3}
+      value: {fileID: -3524474839111058175, guid: f5f649a4555bb5d45b675bdc8d5eb276, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -56,16 +54,16 @@ AnimationClip:
     flags: 2
   - serializedVersion: 2
     curve:
-    - time: 0.11666667
+    - time: 0.033333335
       value: {fileID: 6109827320656886984, guid: dea626d6fe94265499b78b6ccab55640, type: 3}
-    - time: 0.21666667
+    - time: 0.11666667
       value: {fileID: -1650997928, guid: dea626d6fe94265499b78b6ccab55640, type: 3}
-    - time: 0.28333333
+    - time: 0.23333333
       value: {fileID: -864075902, guid: dea626d6fe94265499b78b6ccab55640, type: 3}
     - time: 0.33333334
       value: {fileID: -1485257816, guid: dea626d6fe94265499b78b6ccab55640, type: 3}
     attribute: m_Sprite
-    path: Slash
+    path: UpSlash
     classID: 212
     script: {fileID: 0}
     flags: 2
@@ -77,7 +75,7 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 3322898677
+      path: 3884878663
       attribute: 3305885265
       script: {fileID: 0}
       typeID: 212
@@ -95,7 +93,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 3322898677
+      path: 3884878663
       attribute: 0
       script: {fileID: 0}
       typeID: 212
@@ -104,10 +102,9 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: -2449993428455917677, guid: 747db86c5f6634045ad2b8347f67eef1, type: 3}
-    - {fileID: -2809762651481000769, guid: 747db86c5f6634045ad2b8347f67eef1, type: 3}
-    - {fileID: -5142421022230636189, guid: 747db86c5f6634045ad2b8347f67eef1, type: 3}
-    - {fileID: -2123145097946337898, guid: 747db86c5f6634045ad2b8347f67eef1, type: 3}
+    - {fileID: -4677229879748992270, guid: f5f649a4555bb5d45b675bdc8d5eb276, type: 3}
+    - {fileID: -2970611757462567388, guid: f5f649a4555bb5d45b675bdc8d5eb276, type: 3}
+    - {fileID: -3524474839111058175, guid: f5f649a4555bb5d45b675bdc8d5eb276, type: 3}
     - {fileID: 6109827320656886984, guid: dea626d6fe94265499b78b6ccab55640, type: 3}
     - {fileID: -1650997928, guid: dea626d6fe94265499b78b6ccab55640, type: 3}
     - {fileID: -864075902, guid: dea626d6fe94265499b78b6ccab55640, type: 3}
@@ -122,8 +119,8 @@ AnimationClip:
     m_Level: 0
     m_CycleOffset: 0
     m_HasAdditiveReferencePose: 0
-    m_LoopTime: 0
-    m_LoopBlend: 0
+    m_LoopTime: 1
+    m_LoopBlend: 1
     m_LoopBlendOrientation: 0
     m_LoopBlendPositionY: 0
     m_LoopBlendPositionXZ: 0
@@ -138,7 +135,7 @@ AnimationClip:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.11666667
+        time: 0.033333335
         value: 1
         inSlope: Infinity
         outSlope: Infinity
@@ -150,7 +147,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_Enabled
-    path: Slash
+    path: UpSlash
     classID: 212
     script: {fileID: 0}
     flags: 0

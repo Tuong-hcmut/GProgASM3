@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
     public void PlayRespawnAnimation() => anim.SetTrigger(anim.respawnTrigger);
     public bool GetIsOnGround() => movement.GetIsOnGround();
     public void PlayMusicAudioClip(AudioClip audioClip) => baseEntity.GetMusicPlayer()?.PlayOneShot(audioClip);
-    public void ResetFallDistance() => movement.ResetFallDistance();
+    //public void ResetFallDistance() => movement.ResetFallDistance();
     public void SlideWall_ResetJumpCount() => movement.SlideWall_ResetJumpCount();
     public void SetIsSliding(bool state) => movement.SetIsSliding(state);
     public void SetIsOnGrounded(bool state) => movement.SetIsOnGrounded(state);
