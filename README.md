@@ -2,8 +2,6 @@
 **Metroidvania Platformer Adventure**  
 A classic 2D Metroidvania-style platformer inspired by Super Mario Bros and Castlevania, featuring non-linear exploration, ability unlocking, enemy combat, collectibles, and multiple interconnected areas.
 
-![gameplay preview](https://github.com/user-attachments/assets/placeholder-gameplay.gif)  
-*(Replace with actual screenshot or GIF later)*
 
 ## ⚙️ Setup
 ### Requirements
