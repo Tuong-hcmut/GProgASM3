@@ -19,6 +19,9 @@ public class Invincibility : MonoBehaviour
     public IEnumerator SetInvincibility()
     {
         isInvincible = true;
+        var entity = GetComponent<BaseEntity>();
+        if (entity != null) entity.SetInvincible(true);
+
         Physics2D.IgnoreLayerCollision(13, 15, true);
         for (int i = 0; i < duration; i++)
         {
@@ -28,6 +31,6 @@ public class Invincibility : MonoBehaviour
             render.color = normalColor;
         }
         Physics2D.IgnoreLayerCollision(13, 15, false);
-        isInvincible = false;
+        if (entity != null) entity.SetInvincible(false);
     }
 }

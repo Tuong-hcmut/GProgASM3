@@ -13,11 +13,12 @@ public class BaseEntity : MonoBehaviour
 {
     #region Fields
     [Header("Fields")]
+    [SerializeField] private int maxHealth = 5;
     [SerializeField] private int health;
+    [SerializeField] private bool isInvincible;
     [SerializeField] private bool isDead;
     [SerializeField] protected Animator animator;
     [SerializeField] internal PlayerAudio audioEffectPlayer;
-    [SerializeField] protected PlayerAttack attacker;
     //   [SerializeField] protected PlayerEffect effecter;
     [SerializeField] protected AudioSource audioMusicPlayer;
     [SerializeField] internal GameManager gameManager;
@@ -42,10 +43,23 @@ public class BaseEntity : MonoBehaviour
     //placeholder methods
     public void SetEnableInput(bool input) { gameManager.SetEnableInput(input); }
     public bool IsEnableInput() { return gameManager.IsEnableInput(); }
-    public void LoseHealth(int health)
+
+    public virtual void Hurt(int damage)
     {
-        this.health -= health;
-        CheckIsDead();
+        if (isInvincible || isDead) return;
+
+        health -= Mathf.Abs(damage);
+        //FindFirstObjectByType<HealthUI>()?.OnEntityHurt(this);
+
+        if (GetIsDead()) return;
+
+        //StartCoroutine(FindFirstObjectByType<Invincibility>().SetInvincibility());
+        //animator?.Play("Hurt");
+    }
+
+    public void SetInvincible(bool value)
+    {
+        isInvincible = value;
     }
 
     public int GetCurrentHealth()
@@ -84,7 +98,6 @@ public class BaseEntity : MonoBehaviour
 
     public Animator GetAnimator() => animator;
     public PlayerAudio GetAudio() => audioEffectPlayer;
-    public PlayerAttack GetAttacker() => attacker;
     //  public PlayerEffect GetEffecter() => effecter;
     public AudioSource GetMusicPlayer() => audioMusicPlayer;
     public GameManager GetGameManager() => gameManager;
