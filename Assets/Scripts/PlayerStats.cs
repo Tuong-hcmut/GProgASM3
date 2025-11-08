@@ -26,13 +26,41 @@ public class PlayerStats : MonoBehaviour
             textUI.UpdateMana(mana);
             textUI.UpdateScore(score);
         }
+
+        // Nếu máu <= 0, gọi GameOver
+        if (transform.position.y < -30f) 
+        {
+            currentHP = 0;
+            if (GameManager.Instance != null)
+                GameManager.Instance.OnPlayerDeath();
+        }
+
+        if (currentHP <= 0)
+        {
+            if (GameManager.Instance != null)
+                GameManager.Instance.OnPlayerDeath();
+        }
     }
 
-    // Gọi hàm này mỗi khi người chơi tăng điểm
+    // Gọi khi tăng điểm
     public void AddScore(int amount)
     {
         score += amount;
         if (textUI != null)
             textUI.UpdateScore(score);
+    }
+
+    // Gọi khi nhận damage
+    public void TakeDamage(int amount)
+    {
+        currentHP -= amount;
+        if (currentHP < 0) currentHP = 0;
+
+        if (textUI != null)
+            textUI.UpdateHP(currentHP);
+
+        // Nếu chết
+        if (currentHP <= 0 && GameManager.Instance != null)
+            GameManager.Instance.OnPlayerDeath();
     }
 }

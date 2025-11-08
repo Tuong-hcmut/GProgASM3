@@ -27,8 +27,8 @@ public class Main_Menu_Controller : MonoBehaviour
     public void EnterGame()
     {
         Debug.Log("Enter Game Successfully");
-        //SceneManager.LoadScene("Game_Scene");
-        SceneManager.LoadScene("HGT Testing");
+        SceneManager.LoadScene("enviroment");
+        //SceneManager.LoadScene("HGT Testing");
     }
 
     public void LoadGameButton()

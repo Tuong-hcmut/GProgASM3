@@ -23,12 +23,24 @@ public class GameManager : MonoBehaviour
     public GameObject pauseMenuUI;
     public GameObject gameOverUI;
     public PlayerTextUI playerTextUI;
+    public TMP_Text finalScoreText;
+    public TextMeshProUGUI resultText;
+
+    [Header("Optional UI Elements")]
+    public GameObject healthBar;
+    public GameObject manaBar;
+    public GameObject ScoreText;
+    public GameObject FPSDisplay;
+    public GameObject pauseMenuUInoworking;
 
     [Header("Audio")]
     public AudioSource bgm;
-    public AudioSource deathSFX;
+    public AudioClip deathSFX;
+    public AudioClip victorySFX;
+    public AudioSource eventAudio;
 
     public GameState currentState = GameState.Playing;
+    private bool eventAudioPlayed = false;
 
     private void Awake()
     {
@@ -69,16 +81,79 @@ public class GameManager : MonoBehaviour
 
     public void OnPlayerDeath()
     {
+        if (eventAudioPlayed) return; 
+        eventAudioPlayed = true;
         currentState = GameState.GameOver;
         Time.timeScale = 0f;
 
-        if (deathSFX != null) deathSFX.Play();
-        if (bgm != null) bgm.Stop();
+        if (deathSFX != null) AudioSource.PlayClipAtPoint(deathSFX, player.transform.position);
+        if (bgm != null && bgm.isPlaying) bgm.Stop();
+
+        if (eventAudio != null && deathSFX != null)
+        {
+            if (!eventAudio.isPlaying)
+            {
+                eventAudio.clip = deathSFX;
+                eventAudio.Play();
+            }
+        }
         if (gameOverUI != null) gameOverUI.SetActive(true);
+        if (finalScoreText != null)
+            finalScoreText.text = $"Final Score: {playerStats.score}";
+        if (resultText != null)
+            resultText.text = "YOU DIED!";
+        if (healthBar != null)
+            healthBar.SetActive(false);
+        if (manaBar != null)
+            manaBar.SetActive(false);
+        if (ScoreText != null)
+            ScoreText.SetActive(false);
+        if (FPSDisplay != null)
+            FPSDisplay.SetActive(false);
+        if (pauseMenuUInoworking != null)
+            pauseMenuUInoworking.SetActive(false);
     }
+    public void OnPlayerWin()
+    {
+        if (eventAudioPlayed) return; 
+        eventAudioPlayed = true;
+        currentState = GameState.GameOver;
+        Time.timeScale = 0f;
+
+        if (bgm != null && bgm.isPlaying) bgm.Stop();
+
+        
+        if (eventAudio != null && victorySFX != null)
+        {
+            if (!eventAudio.isPlaying)
+            {
+                eventAudio.clip = victorySFX;
+                eventAudio.Play();
+            }
+        }
+        if (gameOverUI != null) gameOverUI.SetActive(true);
+
+        if (resultText != null)
+            resultText.text = "YOU WON!";
+        if (finalScoreText != null)
+            finalScoreText.text = $"Final Score: {playerStats.score}";
+        if (healthBar != null)
+            healthBar.SetActive(false);
+        if (manaBar != null)
+            manaBar.SetActive(false);
+        if (ScoreText != null)
+            ScoreText.SetActive(false);
+        if (FPSDisplay != null)
+            FPSDisplay.SetActive(false);
+        if (pauseMenuUInoworking != null)
+            pauseMenuUInoworking.SetActive(false);
+    }
+
 
     public void RespawnPlayer()
     {
+        eventAudioPlayed = false;
+
         if (currentCheckpoint != null)
         {
             player.transform.position = currentCheckpoint.position;
@@ -86,11 +161,21 @@ public class GameManager : MonoBehaviour
             playerStats.mana = 50;
             playerTextUI.UpdateHP(playerStats.currentHP);
             playerTextUI.UpdateMana(playerStats.mana);
+            Debug.Log($"Player respawned at checkpoint: {currentCheckpoint.position}");
+        }
+        else
+        {
+            Debug.LogWarning("No checkpoint set! Respawning at default position.");
+            player.transform.position = Vector3.zero;
         }
 
         gameOverUI.SetActive(false);
         Time.timeScale = 1f;
         currentState = GameState.Playing;
+        if (eventAudio != null && eventAudio.isPlaying)
+        eventAudio.Stop();
+
+        
         if (bgm != null) bgm.Play();
     }
 

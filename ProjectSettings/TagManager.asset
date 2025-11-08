@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Wall
   - CheckPoint
+  - Trap
+  - Water
   layers:
   - Default
   - TransparentFX

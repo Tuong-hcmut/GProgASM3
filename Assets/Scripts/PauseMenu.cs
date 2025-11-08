@@ -11,6 +11,7 @@ public class PauseMenu : MonoBehaviour
     public GameObject healthBar;
     public GameObject manaBar;
     public GameObject ScoreText;
+    public GameObject FPSDisplay;
 
     private bool isPaused = false;
 
@@ -37,7 +38,8 @@ public class PauseMenu : MonoBehaviour
             manaBar.SetActive(true);
         if (ScoreText != null)
             ScoreText.SetActive(true);
-        
+        if (FPSDisplay != null)
+            FPSDisplay.SetActive(true);
 
         Time.timeScale = 1f;
         isPaused = false;
@@ -54,6 +56,8 @@ public class PauseMenu : MonoBehaviour
             manaBar.SetActive(false);
         if (ScoreText != null)
             ScoreText.SetActive(false);
+        if (FPSDisplay != null)
+            FPSDisplay.SetActive(false);
 
 
         Time.timeScale = 0f;
