@@ -112,24 +112,33 @@ public class PlayerAttack : BaseEntity
                 movement.AddDownRecoilForce();
             }
         }
-        /*
         foreach (Collider2D col in colliders)
         {
-            var breakable = col.GetComponent<Breakable>();
-            if (breakable != null) breakable.Hurt(slashDamage, transform);
-        }*/
-
+            // enemy damage
+            if (col.gameObject.layer == LayerMask.NameToLayer("Enemy Detector"))
+            {
+                // find the root enemy object, in case the hitbox is a child
+                var enemy = col.GetComponentInParent<BaseEntity>();
+                if (enemy != null && enemy != this && !enemy.GetIsDead())
+                {
+                    enemy.Hurt(slashDamage);
+                }
+                continue;
+            }
+        }
         if (anim != null) anim.Play(animClip);
     }
-
     private void ResetComboTimer()
     {
         if (Time.time >= lastSlashTime + maxComboDelay && slashCount != 0) slashCount = 0;
     }
-
-    public IEnumerator TakeDamage(Enemy enemy = null)
+    public override void Hurt(int damage)
     {
-        gameManager.SetEnableInput(false);
+        base.Hurt(damage);
+        TakeDamage();
+    }
+    public IEnumerator TakeDamage()
+    {
         audioEffectPlayer?.Play(PlayerAudio.AudioType.HeroDamage, true);
         FindFirstObjectByType<HealthUI>()?.Hurt();
         if (!GetIsDead())
@@ -138,7 +147,9 @@ public class PlayerAttack : BaseEntity
             movement.ApplyDamageMovement();
         }
         if (anim != null) anim.Play("Hurt");
-        yield return null;
+        gameManager.SetEnableInput(false);
+        yield return new WaitForSeconds(0.5f);
+        gameManager.SetEnableInput(true);
     }
     public void Play(AttackType attackType, ref List<Collider2D> colliders)
     {

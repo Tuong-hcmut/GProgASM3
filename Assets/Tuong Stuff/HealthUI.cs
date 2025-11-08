@@ -43,4 +43,19 @@ public class HealthUI : MonoBehaviour
             healthItems[i].SetTrigger("Hide");
         }
     }
+    public void OnEntityHurt(BaseEntity entity)
+    {
+        if (entity != playerEntity) return;
+
+        int health = entity.GetCurrentHealth();
+        if (entity.GetIsDead())
+        {
+            foreach (var item in healthItems)
+                item.SetTrigger("Hide");
+        }
+        else
+        {
+            healthItems[health].SetTrigger("Hurt");
+        }
+    }
 }
