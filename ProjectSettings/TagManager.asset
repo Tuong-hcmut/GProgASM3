@@ -8,6 +8,10 @@ TagManager:
   - CheckPoint
   - Trap
   - Water
+  - Enemy
+  - EnemyHead
+  - BossHead
+  - Ground
   layers:
   - Default
   - TransparentFX

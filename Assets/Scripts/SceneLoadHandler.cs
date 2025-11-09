@@ -21,7 +21,7 @@ public class SceneLoadHandler : MonoBehaviour
         if (player != null)
         {
             var psl = player.GetComponent<PlayerSaveLoad>();
-            if (psl != null) psl.ApplySave(sd);
+            if (psl != null) psl.ApplyLoadedSave(sd);
             else player.transform.position = sd.GetPosition();
         }
         else

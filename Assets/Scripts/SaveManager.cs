@@ -125,35 +125,114 @@ public class SaveManager : MonoBehaviour
             Debug.Log("No save in that slot.");
             return;
         }
+        SaveData data = cachedSaves[slotIndex];
 
-        pendingLoadedSave = cachedSaves[slotIndex];
-        SceneManager.LoadScene(pendingLoadedSave.sceneName);
-    }
-
-    // --- Apply save to player after scene loads ---
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        if (pendingLoadedSave != null)
+        if (SceneManager.GetActiveScene().name == data.sceneName)
         {
-            var handler = FindFirstObjectByType<SceneLoadHandler>();
-            if (handler != null)
-            {
-                handler.ApplyLoadedSave(pendingLoadedSave);
-                pendingLoadedSave = null;
-                return;
-            }
-
             var player = GameObject.FindWithTag("Player");
             if (player != null)
             {
-                var playerSaveLoad = player.GetComponent<PlayerSaveLoad>();
-                if (playerSaveLoad != null)
-                    playerSaveLoad.ApplySave(pendingLoadedSave);
+                var psl = player.GetComponent<PlayerSaveLoad>();
+                if (psl != null)
+                    psl.ApplyLoadedSave(data);
+                else
+                    player.transform.position = data.GetPosition();
+
+                Debug.Log($"[Load] Restored player to position {data.GetPosition()} in {data.sceneName}");
             }
-            pendingLoadedSave = null;
+            else
+            {
+                Debug.LogWarning("[Load] Player not found in current scene!");
+            }
+        }
+        else
+        {
+            // Nếu khác scene, thì mới load scene
+            pendingLoadedSave = data;
+            SceneManager.LoadScene(data.sceneName);
         }
     }
 
+    // --- Apply save to player after scene loads ---
+    // private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    // {
+    //     if (pendingLoadedSave != null)
+    //     {
+    //         var handler = FindFirstObjectByType<SceneLoadHandler>();
+    //         if (handler != null)
+    //         {
+    //             handler.ApplyLoadedSave(pendingLoadedSave);
+    //             pendingLoadedSave = null;
+    //             return;
+    //         }
+
+    //         var player = GameObject.FindWithTag("Player");
+    //         if (player != null)
+    //         {
+    //             var playerSaveLoad = player.GetComponent<PlayerSaveLoad>();
+    //             if (playerSaveLoad != null)
+    //                 playerSaveLoad.ApplyLoadedSave(pendingLoadedSave);
+    //         }
+    //         pendingLoadedSave = null;
+    //     }
+    // }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Chỉ chạy nếu có save đang chờ load
+        if (pendingLoadedSave != null)
+        {
+            // Bắt đầu một coroutine để đợi 1 frame
+            // Điều này đảm bảo tất cả hàm Start() trong scene đã chạy xong
+            StartCoroutine(ApplySaveAfterSceneLoad());
+        }
+    }
+
+    private System.Collections.IEnumerator ApplySaveAfterSceneLoad()
+    {
+        // Đợi đến cuối frame, sau khi tất cả Update() và Start() đã chạy
+        yield return new WaitForEndOfFrame();
+        
+        // Kiểm tra lại phòng khi có lỗi
+        if (pendingLoadedSave == null) yield break; 
+
+        // 1. Tìm SceneLoadHandler (cách ưu tiên)
+        var handler = FindFirstObjectByType<SceneLoadHandler>();
+        if (handler != null)
+        {
+            Debug.Log("ApplySaveAfterSceneLoad: Tìm thấy SceneLoadHandler. Đang áp dụng save...");
+            handler.ApplyLoadedSave(pendingLoadedSave);
+        }
+        else
+        {
+            // 2. Cách dự phòng (nếu quên thêm SceneLoadHandler vào scene)
+            Debug.LogWarning("ApplySaveAfterSceneLoad: Không tìm thấy SceneLoadHandler! SaveManager sẽ tự áp dụng.");
+            
+            var player = GameObject.FindWithTag("Player");
+            if (player != null)
+            {
+                // Áp dụng vị trí
+                player.transform.position = pendingLoadedSave.GetPosition();
+
+                // Áp dụng chỉ số
+                var stats = player.GetComponent<PlayerStats>();
+                if (stats != null)
+                {
+                    stats.currentHP = pendingLoadedSave.playerHP;
+                    stats.mana = pendingLoadedSave.playerMana;
+                    stats.score = pendingLoadedSave.playerScore;
+                }
+                Debug.Log($"[Load] Đã áp dụng save dự phòng cho Player.");
+            }
+            else
+            {
+                Debug.LogError("ApplySaveAfterSceneLoad: Không tìm thấy Player (tag 'Player')!");
+            }
+        }
+
+        // Xóa save đang chờ sau khi đã áp dụng xong
+        pendingLoadedSave = null;
+    }
     public void DeleteSlot(int slotIndex)
     {
         if (slotIndex < 0 || slotIndex >= slotCount) return;

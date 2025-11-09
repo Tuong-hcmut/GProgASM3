@@ -37,7 +37,7 @@ public class Checkpoint : MonoBehaviour
             if (SaveManager.Instance != null)
             {
                 SaveManager.Instance.AutoSave(
-                    transform.position,
+                    collision.transform.position,
                     stats.currentHP,
                     stats.mana,
                     stats.score

@@ -2,35 +2,36 @@ using UnityEngine;
 
 public class PlayerSaveLoad : MonoBehaviour
 {
-    private PlayerStats stats;
-
-    private void Awake()
+    public void ApplyLoadedSave(SaveData sd)
     {
-        stats = GetComponent<PlayerStats>();
-        if (stats == null)
-            Debug.LogWarning("PlayerStats not found on Player!");
-    }
+        if (sd == null) return;
 
-    public void ApplySave(SaveData sd)
-    {
-        if (sd == null || stats == null) return;
-
-        // Di chuyển player về vị trí lưu
-        transform.position = sd.GetPosition();
-
-        // Áp dụng chỉ số
-        stats.currentHP = sd.playerHP;
-        stats.mana = sd.playerMana;
-        stats.score = sd.playerScore;
-
-        // Cập nhật UI
-        if (stats.textUI != null)
+        // 1. Tìm player
+        var player = GameObject.FindWithTag("Player");
+        if (player == null)
         {
-            stats.textUI.UpdateHP(stats.currentHP);
-            stats.textUI.UpdateMana(stats.mana);
-            stats.textUI.UpdateScore(stats.score);
+            Debug.LogError("ApplyLoadedSave: Không tìm thấy Player (tag 'Player')!");
+            return;
         }
 
-        Debug.Log($"Loaded Save → Pos: {sd.GetPosition()} | HP: {stats.currentHP} | Mana: {stats.mana} | Score: {stats.score}");
+        // 2. LUÔN LUÔN set vị trí
+        // Lưu ý: Nếu player dùng CharacterController, bạn có thể cần tắt nó đi
+        // rồi bật lại sau khi set position, nhưng cứ thử cách này trước.
+        player.transform.position = sd.GetPosition();
+        Debug.Log($"[Load] Đã set vị trí Player tới {sd.GetPosition()}");
+
+        // 3. LUÔN LUÔN tìm PlayerStats và áp dụng chỉ số
+        var stats = player.GetComponent<PlayerStats>();
+        if (stats != null)
+        {
+            stats.currentHP = sd.playerHP;
+            stats.mana = sd.playerMana;
+            stats.score = sd.playerScore;
+            Debug.Log($"[Load] Đã áp dụng chỉ số: HP={sd.playerHP}, Mana={sd.playerMana}, Score={sd.playerScore}");
+        }
+        else
+        {
+            Debug.LogWarning("ApplyLoadedSave: Không tìm thấy PlayerStats trên Player!");
+        }
     }
 }

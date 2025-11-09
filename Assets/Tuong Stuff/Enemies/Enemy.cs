@@ -49,7 +49,10 @@ public class Enemy : BaseEntity
         if (visionCone != null)
         {
             var vc = visionCone.GetComponent<VisionCone>();
-            vc.owner = this;
+            if (vc == null)
+            {
+                visionCone.AddComponent<VisionCone>();
+            }
         }
     }
 
