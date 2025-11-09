@@ -8,7 +8,8 @@
 ///  - Tell the other guy to make respawn points.
 /// </summary>
 using UnityEngine;
-
+using System.Collections;
+using Unity.IO.LowLevel.Unsafe;
 public class BaseEntity : MonoBehaviour
 {
     #region Fields
@@ -24,6 +25,9 @@ public class BaseEntity : MonoBehaviour
     [SerializeField] internal GameManager gameManager;
 
     protected Rigidbody2D rb;
+    protected bool isFacingLeft = false;
+    readonly Quaternion flippedScale = Quaternion.Euler(0, 180, 0);
+    readonly Quaternion normalScale = Quaternion.Euler(0, 0, 0);
     #endregion
     #region Methods
 
@@ -33,17 +37,27 @@ public class BaseEntity : MonoBehaviour
         if (rb == null) rb = GetComponent<Rigidbody2D>();
         if (gameManager == null) gameManager = FindFirstObjectByType<GameManager>();
     }
-    private void CheckIsDead()
-    {
-        if (health <= 0 && !isDead)
-        {
-            Die();
-        }
-    }
     //placeholder methods
     public void SetEnableInput(bool input) { gameManager.SetEnableInput(input); }
     public bool IsEnableInput() { return gameManager.IsEnableInput(); }
-
+    public void TurnLeft()
+    {
+        isFacingLeft = true;
+        transform.rotation = flippedScale;
+    }
+    public void TurnRight()
+    {
+        isFacingLeft = false;
+        transform.rotation = normalScale;
+    }
+    protected void Flip()
+    {
+        if (isFacingLeft)
+        {
+            TurnRight();
+        }
+        else TurnLeft();
+    }
     public virtual void Hurt(int damage)
     {
         if (isInvincible || isDead) return;
@@ -55,6 +69,10 @@ public class BaseEntity : MonoBehaviour
 
         //StartCoroutine(FindFirstObjectByType<Invincibility>().SetInvincibility());
         //animator?.Play("Hurt");
+    }
+    public virtual void Hurt(int damage, Transform damagesource)
+    {
+        Hurt(damage);
     }
 
     public void SetInvincible(bool value)
@@ -69,20 +87,35 @@ public class BaseEntity : MonoBehaviour
 
     public bool GetIsDead()
     {
-        CheckIsDead();
+        if (health <= 0 && !isDead)
+        {
+            Die();
+        }
         return isDead;
     }
 
-    public void Die()
+    public virtual void Die()
     {
-        Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Hero Detector"), LayerMask.NameToLayer("Enemy Detector"), true);
         isDead = true;
-        animator.SetTrigger("Dead");
+        animator.Play("Dead");
+    }
+    protected IEnumerator DestroyAfterAnimation()
+    {
+        print("DestroyAfterAnimation called");
+        // Wait for the current "Dead" animation to finish
+        float deathAnimLength = 0.5f;
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Dead"))
+            deathAnimLength = animator.GetCurrentAnimatorStateInfo(0).length;
+        print(deathAnimLength);
+        yield return new WaitForSeconds(deathAnimLength);
+        print("Destroy called");
+        Destroy(gameObject);
     }
 
     public void Respawn()
     {
-        //     FindFirstObjectByType<HazardRespawn>().Respawn();
+        isDead = false;
+        health = (health > 0) ? health : maxHealth;
     }
 
     public void SetRespawnData(int health)
@@ -102,4 +135,5 @@ public class BaseEntity : MonoBehaviour
     public AudioSource GetMusicPlayer() => audioMusicPlayer;
     public GameManager GetGameManager() => gameManager;
     public Rigidbody2D GetRigidbody() => rb;
+    public bool GetIsFacingLeft() => isFacingLeft;
 }

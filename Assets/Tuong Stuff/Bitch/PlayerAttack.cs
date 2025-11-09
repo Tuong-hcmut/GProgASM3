@@ -94,7 +94,7 @@ public class PlayerAttack : BaseEntity
     private void DoSlash(AttackType type, string animClip)
     {
         List<Collider2D> colliders = new List<Collider2D>();
-        attacker.Play(type, ref colliders);
+        Play(type, ref colliders);
 
         bool hasEnemy = colliders.Any(c => c.gameObject.layer == LayerMask.NameToLayer("Enemy Detector"));
         bool hasDamageAll = colliders.Any(c => c.gameObject.layer == LayerMask.NameToLayer("Damage All"));
@@ -118,7 +118,7 @@ public class PlayerAttack : BaseEntity
             if (col.gameObject.layer == LayerMask.NameToLayer("Enemy Detector"))
             {
                 // find the root enemy object, in case the hitbox is a child
-                var enemy = col.GetComponentInParent<BaseEntity>();
+                var enemy = col.GetComponentInParent<Enemy>();
                 if (enemy != null && enemy != this && !enemy.GetIsDead())
                 {
                     enemy.Hurt(slashDamage);
@@ -140,7 +140,6 @@ public class PlayerAttack : BaseEntity
     public IEnumerator TakeDamage()
     {
         audioEffectPlayer?.Play(PlayerAudio.AudioType.HeroDamage, true);
-        FindFirstObjectByType<HealthUI>()?.Hurt();
         if (!GetIsDead())
         {
             StartCoroutine(FindFirstObjectByType<Invincibility>().SetInvincibility());

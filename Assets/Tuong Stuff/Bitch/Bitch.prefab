@@ -835,7 +835,7 @@ GameObject:
   - component: {fileID: 41700619876087730}
   - component: {fileID: 4108618668506839809}
   - component: {fileID: 4590571482753132781}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bitch
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1000,11 +1000,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b91bfca84c7e9cc449b66b487e7f4977, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
+  maxHealth: 5
   health: 5
+  isInvincible: 0
   isDead: 0
   animator: {fileID: 296222741029286883}
   audioEffectPlayer: {fileID: 0}
-  attacker: {fileID: 962643793072061262}
   audioMusicPlayer: {fileID: 0}
   gameManager: {fileID: 0}
   maxComboDelay: 0.4
@@ -1059,9 +1060,9 @@ MonoBehaviour:
   dashForce: 72
   dashDuration: 0.3
   dashCooldown: 1
-  recoilForce: 150
+  recoilForce: 1000
   downRecoilForce: 3000
-  hurtForce: 10
+  hurtForce: 3000
   maxGravityVelocity: 50
   jumpGravityScale: 15
   fallGravityScale: 5

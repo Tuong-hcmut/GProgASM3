@@ -49,7 +49,6 @@ public class PlayerMovement : MonoBehaviour
 
 
     private bool isOnGround = true;
-    private bool isFacingLeft = false;
     private bool isJumping = false;
     private bool isSliding = false;
     //  private bool isFalling;
@@ -85,7 +84,6 @@ public class PlayerMovement : MonoBehaviour
         // read input
         if (inputHandler != null) vectorInput = inputHandler.MoveInput;
         UpdateVelocity();
-        UpdateDirection();
         UpdateJump();
         UpdateGravityScale();
         if (anim != null)
@@ -109,11 +107,17 @@ public class PlayerMovement : MonoBehaviour
             if (canMove && baseEntity.gameManager.IsEnableInput())
             {
                 rb.linearVelocity = new Vector2(vectorInput.x * maxSpeed, velocity.y);
+                if (rb.linearVelocity.x > 0)
+                {
+                    baseEntity.TurnRight();
+                }
+                else if (rb.linearVelocity.x < 0) baseEntity.TurnLeft();
                 if (anim != null) anim.SetInteger(anim.movementSpeed, (int)vectorInput.x);
             }
         }
         else
         {
+            baseEntity.gameManager.SetEnableInput(false);
             Vector2 velocity = rb.linearVelocity;
             velocity.x = 0;
             velocity.y = Mathf.Clamp(velocity.y, -maxGravityVelocity, maxGravityVelocity);
@@ -128,7 +132,7 @@ public class PlayerMovement : MonoBehaviour
     private void OnDashStarted()
     {
         print("ondashstart");
-        if (!baseEntity.gameManager.IsEnableInput() || baseEntity.GetIsDead()) return;
+        if (!baseEntity.gameManager.IsEnableInput()) return;
         if (!canDash || isDashing) return;
         if (dashCount >= 1) return;
 
@@ -143,7 +147,7 @@ public class PlayerMovement : MonoBehaviour
 
         baseEntity.gameManager.SetEnableInput(false);
         enableGravity = false;
-        float direction = isFacingLeft ? -1f : 1f;
+        float direction = baseEntity.GetIsFacingLeft() ? -1f : 1f;
         if (anim != null) anim.Play("Dashing");
 
         // Apply instantaneous velocity
@@ -168,7 +172,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnJumpStarted()
     {
-        if (baseEntity.GetIsDead()) return;
         if (isSliding && !isOnGround)
         {
             StartCoroutine(GrabWallJump());
@@ -231,27 +234,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void UpdateDirection()
-    {
-        if (canMove && !baseEntity.GetIsDead())
-        {
-            if (rb.linearVelocity.x > 0 && isFacingLeft)
-            {
-                //print("flip to right");
-                isFacingLeft = false;
-                transform.rotation = normalScale;
-                //anim.transform.localScale = flippedScale;
-            }
-            else if (rb.linearVelocity.x < 0 && !isFacingLeft)
-            {
-                //print("flip to left");
-                isFacingLeft = true;
-                transform.rotation = flippedScale;
-                //anim.transform.localScale = Vector3.one;
-            }
-        }
-    }
-
     private void UpdateGravityScale()
     {
         var gravityScale = groundedGravityScale;
@@ -273,7 +255,7 @@ public class PlayerMovement : MonoBehaviour
         baseEntity.gameManager.SetEnableInput(false);
         enableGravity = false;
         if (anim != null) anim.Play("Jump");
-        int direction = isFacingLeft ? 1 : -1;
+        int direction = baseEntity.GetIsFacingLeft() ? 1 : -1;
         rb.linearVelocity = new Vector2(transform.lossyScale.x * wallReactingForce * direction, wallJumpForce);
         yield return new WaitForSeconds(0.15f);
         enableGravity = true;
@@ -310,7 +292,7 @@ public class PlayerMovement : MonoBehaviour
     public IEnumerator AddRecoilForce()
     {
         canMove = false;
-        if (transform.localScale.x < 0)
+        if (baseEntity.GetIsFacingLeft())
             rb.AddForce(Vector2.right * recoilForce, ForceMode2D.Force);
         else
             rb.AddForce(Vector2.left * recoilForce, ForceMode2D.Force);
@@ -367,13 +349,13 @@ public class PlayerMovement : MonoBehaviour
     public void SetIsSliding(bool state)
     {
         isSliding = state;
-        if (!baseEntity.GetIsDead() && anim != null) anim.SetBool(anim.slidingBool, isSliding);
+        if (anim != null) anim.SetBool(anim.slidingBool, isSliding);
     }
 
     public void SetIsOnGrounded(bool state)
     {
         isOnGround = state;
-        if (!baseEntity.GetIsDead() && anim != null) anim.SetBool(anim.groundedBool, isOnGround);
+        if (anim != null) anim.SetBool(anim.groundedBool, isOnGround);
     }
 
     public void SlideWall_ResetJumpCount()
