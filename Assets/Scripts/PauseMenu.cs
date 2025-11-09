@@ -12,6 +12,7 @@ public class PauseMenu : MonoBehaviour
     public GameObject manaBar;
     public GameObject ScoreText;
     public GameObject FPSDisplay;
+    public static int score = 0;
 
     private bool isPaused = false;
 
