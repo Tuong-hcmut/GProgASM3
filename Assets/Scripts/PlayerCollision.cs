@@ -3,7 +3,7 @@ using UnityEngine;
 public class PlayerCollision : MonoBehaviour
 {
     private PlayerStats playerStats;
-    public float stompBounceForce = 10f; 
+    public float stompBounceForce = 10f;
     private Rigidbody2D rb;
 
     void Start()
@@ -27,11 +27,11 @@ public class PlayerCollision : MonoBehaviour
             }
             if (rb != null)
             {
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0); 
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
                 rb.AddForce(Vector2.up * stompBounceForce, ForceMode2D.Impulse);
             }
         }
-        
+
         // --- LOGIC MỚI CHO BOSS ---
         // ƯU TIÊN 2: Dậm đầu Boss
         else if (collision.CompareTag("BossHead"))
@@ -41,11 +41,11 @@ public class PlayerCollision : MonoBehaviour
             {
                 Debug.Log("Stomped on BOSS head!");
                 boss.TakeDamage(1); // Gây 1 "điểm" sát thương
-                
+
                 // Nảy lên
                 if (rb != null)
                 {
-                    rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0); 
+                    rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
                     rb.AddForce(Vector2.up * stompBounceForce, ForceMode2D.Impulse);
                 }
             }
@@ -55,7 +55,6 @@ public class PlayerCollision : MonoBehaviour
         // ƯU TIÊN 3: Va chạm khác
         else if (collision.CompareTag("Enemy"))
         {
-            playerStats.TakeDamage(20);
         }
         else if (collision.CompareTag("Trap"))
         {

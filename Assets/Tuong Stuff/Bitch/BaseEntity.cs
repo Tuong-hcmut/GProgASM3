@@ -14,8 +14,8 @@ public class BaseEntity : MonoBehaviour
 {
     #region Fields
     [Header("Fields")]
-    [SerializeField] private int maxHealth = 5;
-    [SerializeField] private int health;
+    [SerializeField] protected int maxHealth = 5;
+    [SerializeField] protected int health;
     [SerializeField] private bool isInvincible;
     [SerializeField] private bool isDead;
     [SerializeField] protected Animator animator;
@@ -68,7 +68,7 @@ public class BaseEntity : MonoBehaviour
         if (GetIsDead()) return;
 
         //StartCoroutine(FindFirstObjectByType<Invincibility>().SetInvincibility());
-        //animator?.Play("Hurt");
+        animator?.Play("Hurt");
     }
     public virtual void Hurt(int damage, Transform damagesource)
     {
@@ -83,6 +83,10 @@ public class BaseEntity : MonoBehaviour
     public int GetCurrentHealth()
     {
         return health;
+    }
+    public void SetCurrentHealth(int amount)
+    {
+        health = amount;
     }
 
     public bool GetIsDead()

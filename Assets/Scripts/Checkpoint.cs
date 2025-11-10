@@ -17,12 +17,12 @@ public class Checkpoint : MonoBehaviour
             return;
         }
 
-        
+
         if (!isActivated)
         {
             isActivated = true;
 
-           
+
             if (GameManager.Instance != null)
             {
                 GameManager.Instance.SetCheckpoint(transform);
@@ -33,7 +33,7 @@ public class Checkpoint : MonoBehaviour
                 Debug.LogWarning("GameManager.Instance is NULL!");
             }
 
-            
+
             if (SaveManager.Instance != null)
             {
                 SaveManager.Instance.AutoSave(
@@ -49,7 +49,7 @@ public class Checkpoint : MonoBehaviour
                 Debug.LogWarning("SaveManager.Instance is NULL!");
             }
 
-            
+
             if (saveNotificationUI != null)
                 saveNotificationUI.ShowNotification("Game Saved");
         }

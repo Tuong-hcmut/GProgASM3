@@ -69,7 +69,7 @@ public class Enemy : BaseEntity
     {
         if (GetIsDead()) return;
         if (collision.gameObject.layer == LayerMask.NameToLayer("Hero Detector"))
-            character?.Hurt(1);
+            character?.Hurt(15);
     }
 
     public override void Hurt(int damage, Transform attackPosition)

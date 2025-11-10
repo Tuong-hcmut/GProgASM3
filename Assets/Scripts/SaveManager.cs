@@ -12,13 +12,14 @@ public class SaveManager : MonoBehaviour
     private SaveData[] cachedSaves;
 
     public SaveData pendingLoadedSave;
-
+    protected PlayerAttack character;
     private void Awake()
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
+        character = FindFirstObjectByType<PlayerAttack>();
         filePaths = new string[slotCount];
         cachedSaves = new SaveData[slotCount];
         for (int i = 0; i < slotCount; i++)
@@ -30,10 +31,10 @@ public class SaveManager : MonoBehaviour
 
     public void AutoSaveToFile(Vector3 pos, int hp, int mana, int score)
     {
-    SaveData data = new SaveData(pos, SceneManager.GetActiveScene().name, hp, mana, score);
-    string path = Application.persistentDataPath + "/save1.json";
-    File.WriteAllText(path, JsonUtility.ToJson(data));
-    Debug.Log($"[SAVE] Game saved at {path}");
+        SaveData data = new SaveData(pos, SceneManager.GetActiveScene().name, hp, mana, score);
+        string path = Application.persistentDataPath + "/save1.json";
+        File.WriteAllText(path, JsonUtility.ToJson(data));
+        Debug.Log($"[SAVE] Game saved at {path}");
     }
 
     private void OnDestroy()
@@ -192,9 +193,9 @@ public class SaveManager : MonoBehaviour
     {
         // Đợi đến cuối frame, sau khi tất cả Update() và Start() đã chạy
         yield return new WaitForEndOfFrame();
-        
+
         // Kiểm tra lại phòng khi có lỗi
-        if (pendingLoadedSave == null) yield break; 
+        if (pendingLoadedSave == null) yield break;
 
         // 1. Tìm SceneLoadHandler (cách ưu tiên)
         var handler = FindFirstObjectByType<SceneLoadHandler>();
@@ -207,7 +208,7 @@ public class SaveManager : MonoBehaviour
         {
             // 2. Cách dự phòng (nếu quên thêm SceneLoadHandler vào scene)
             Debug.LogWarning("ApplySaveAfterSceneLoad: Không tìm thấy SceneLoadHandler! SaveManager sẽ tự áp dụng.");
-            
+
             var player = GameObject.FindWithTag("Player");
             if (player != null)
             {
@@ -218,7 +219,7 @@ public class SaveManager : MonoBehaviour
                 var stats = player.GetComponent<PlayerStats>();
                 if (stats != null)
                 {
-                    stats.currentHP = pendingLoadedSave.playerHP;
+                    character.SetCurrentHealth(pendingLoadedSave.playerHP);
                     stats.mana = pendingLoadedSave.playerMana;
                     stats.score = pendingLoadedSave.playerScore;
                 }

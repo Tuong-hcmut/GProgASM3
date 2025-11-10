@@ -2,11 +2,9 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI; // Cần thiết cho UI Slider
 
-public class BigBoss : MonoBehaviour
+public class BigBoss : Enemy
 {
     [Header("Health & Stats")]
-    public int maxHealth = 3; // Cần 3 cú dậm để thắng
-    private int currentHealth;
     public Slider healthBar; // Kéo Slider "BossHealthBar" vào đây
     public GameObject stunIndicator; // (Tùy chọn) Một icon "!" để hiện khi bị choáng
 
@@ -27,12 +25,11 @@ public class BigBoss : MonoBehaviour
     public float slamRadius = 3f; // Bán kính sát thương khi đáp
     public int slamDamage = 30; // Sát thương gây cho player
     public float vulnerabilityDuration = 3f; // Bị choáng 3 giây
-    private Rigidbody2D rb;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        currentHealth = maxHealth;
+        health = maxHealth;
         UpdateHealthBar();
 
         if (playerTransform == null)
@@ -71,10 +68,10 @@ public class BigBoss : MonoBehaviour
     private void ThrowFireball()
     {
         if (fireballPrefab == null || playerTransform == null) return;
-        
+
         Debug.Log("Boss: Throwing Fireball!");
         GameObject fireball = Instantiate(fireballPrefab, fireballSpawnPoint.position, Quaternion.identity);
-        
+
         // Tính toán hướng bay
         Vector2 direction = (playerTransform.position - fireballSpawnPoint.position).normalized;
         fireball.GetComponent<Fireball>().Setup(direction); // Gửi hướng đi cho script Fireball
@@ -87,8 +84,8 @@ public class BigBoss : MonoBehaviour
         {
             // Chờ hết thời gian
             yield return new WaitForSeconds(jumpSlamInterval);
-            
-            if(isVulnerable) yield return null; // Bỏ qua nếu đang bị choáng
+
+            if (isVulnerable) yield return null; // Bỏ qua nếu đang bị choáng
 
             Debug.Log("Boss: Preparing Jump Slam!");
             // 1. Nhảy lên
@@ -98,7 +95,7 @@ public class BigBoss : MonoBehaviour
             // (Giả sử bạn có hàm IsGrounded() giống như Crawler)
             yield return new WaitForSeconds(1.0f); // Chờ bay lên
             yield return new WaitUntil(() => rb.linearVelocity.y < 0.1f && IsGrounded()); // Đợi đến khi chạm đất
-            
+
             // 3. Gây sát thương AOE khi đáp
             SlamAttack();
 
@@ -108,7 +105,7 @@ public class BigBoss : MonoBehaviour
             SetVulnerable(false);
         }
     }
-    
+
     // (Bạn cần tự implement hàm này dựa trên groundCheck của boss)
     private bool IsGrounded()
     {
@@ -151,14 +148,14 @@ public class BigBoss : MonoBehaviour
             isPlayerInSight = false;
         }
     }
-    
+
     private void SetVulnerable(bool state)
     {
         isVulnerable = state;
         Debug.Log("Boss vulnerable: " + state);
         if (stunIndicator != null) stunIndicator.SetActive(state);
     }
-    
+
     // Hàm này cho PlayerCollision gọi
     public bool IsVulnerable()
     {
@@ -170,14 +167,14 @@ public class BigBoss : MonoBehaviour
         // Chỉ nhận sát thương khi đang bị choáng
         if (!isVulnerable) return;
 
-        currentHealth -= damage;
+        health -= damage;
         UpdateHealthBar();
-        Debug.Log("Boss took damage! Health: " + currentHealth);
+        Debug.Log("Boss took damage! Health: " + health);
 
         // Bị đánh 1 phát là hết choáng ngay
         SetVulnerable(false);
 
-        if (currentHealth <= 0)
+        if (health <= 0)
         {
             Die();
         }
@@ -191,17 +188,18 @@ public class BigBoss : MonoBehaviour
         StopAllCoroutines();
         this.enabled = false;
         // Tắt UI
-        if(healthBar != null) healthBar.gameObject.SetActive(false);
+        if (healthBar != null) healthBar.gameObject.SetActive(false);
         // (Thêm animation chết, âm thanh, v.v.)
-        
+        character.GetAnimator().SetTrigger("Victory");
         Destroy(gameObject, 2f); // Biến mất sau 2 giây
+        character.GetAnimator().ResetTrigger("Victory");
     }
 
     private void UpdateHealthBar()
     {
         if (healthBar != null)
         {
-            healthBar.value = (float)currentHealth / maxHealth;
+            healthBar.value = (float)health / maxHealth;
         }
     }
 }

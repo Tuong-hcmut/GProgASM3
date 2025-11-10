@@ -2,14 +2,15 @@ using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
 {
-    public int currentHP = 100;
+    public int currentHP;
     public int mana = 50;
     public int score = 0;
-
+    protected PlayerAttack character;
     public PlayerTextUI textUI;
 
     void Start()
     {
+        character = FindFirstObjectByType<PlayerAttack>();
         if (textUI != null)
         {
             textUI.UpdateHP(currentHP);
@@ -20,6 +21,7 @@ public class PlayerStats : MonoBehaviour
 
     void Update()
     {
+        currentHP = character.GetCurrentHealth();
         if (textUI != null)
         {
             textUI.UpdateHP(currentHP);
@@ -28,9 +30,8 @@ public class PlayerStats : MonoBehaviour
         }
 
         // Nếu máu <= 0, gọi GameOver
-        if (transform.position.y < -30f) 
+        if (transform.position.y < -30f)
         {
-            currentHP = 0;
             if (GameManager.Instance != null)
                 GameManager.Instance.OnPlayerDeath();
         }
@@ -53,14 +54,6 @@ public class PlayerStats : MonoBehaviour
     // Gọi khi nhận damage
     public void TakeDamage(int amount)
     {
-        currentHP -= amount;
-        if (currentHP < 0) currentHP = 0;
-
-        if (textUI != null)
-            textUI.UpdateHP(currentHP);
-
-        // Nếu chết
-        if (currentHP <= 0 && GameManager.Instance != null)
-            GameManager.Instance.OnPlayerDeath();
+        character.Hurt(amount);
     }
 }
